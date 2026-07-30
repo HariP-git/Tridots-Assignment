@@ -1,0 +1,53 @@
+api.py
+
+import frappe
+
+@frappe.whitelist()
+def create_task(task_subject):
+    task = frappe.new_doc("Task")
+    task.subject = task_subject
+    task.save()
+
+    return task.name
+
+
+client script
+
+let d = new frappe.ui.Dialog({
+    title: "Create Task",
+    fields: [
+        {
+            label: "Task Subject",
+            fieldname: "task_subject",
+            fieldtype: "Data",
+            reqd: 1
+        }
+    ],
+    primary_action_label: "Create Task",
+
+    primary_action(values) {
+
+        frappe.call({
+            method: "cafe_management.api.create_task",
+
+            args: {
+                task_subject: values.task_subject
+            },
+
+            callback: function(r) {
+
+                d.hide();
+
+                frappe.msgprint({
+                    title: "Success",
+                    message: "Task Created Successfully : " + r.message,
+                    indicator: "green"
+                });
+
+            }
+        });
+
+    }
+});
+
+d.show();
