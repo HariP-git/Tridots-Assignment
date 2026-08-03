@@ -1,0 +1,9 @@
+#controller using py file
+from frappe.model.document import Document
+import frappe
+
+class student(Document):
+
+    def before_save(self):
+        if not self.subject_name:
+            frappe.throw("Subject Name is required")
