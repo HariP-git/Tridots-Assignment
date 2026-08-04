@@ -5,9 +5,7 @@ from frappe.query_builder import DocType
 @frappe.whitelist()
 def process_orders():
 
-    # -------------------------------
-    # Task 1 : Query Builder
-    # -------------------------------
+
 
     Order = DocType("order info")
     Customer = DocType("customer info")
@@ -28,9 +26,7 @@ def process_orders():
         .run(as_dict=True)
     )
 
-    # -------------------------------
-    # Task 2 : Document API
-    # -------------------------------
+
 
     if orders:
         order_doc = frappe.get_doc(
@@ -42,9 +38,6 @@ def process_orders():
 
         order_doc.save()
 
-    # -------------------------------
-    # Task 3 : Database API
-    # -------------------------------
 
     for order in orders:
         frappe.db.set_value(
@@ -54,9 +47,6 @@ def process_orders():
             "Completed"
         )
 
-    # -------------------------------
-    # Return Result
-    # -------------------------------
 
     return {
         "message": "Orders processed successfully",
